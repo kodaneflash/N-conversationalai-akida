@@ -11,19 +11,31 @@ export const useStartHaircheck = (): {
 	requestPermissions: () => void;
 } => {
 	const daily = useDaily();
-	const { micState } = useDevices();
+	const { micState, camState } = useDevices();
 
 	const [permissionState, setPermissionState] = useState<PermissionState | null>(null);
 
 	useEffect(() => {
-		navigator.permissions
-			.query({ name: 'microphone' as PermissionName })
-			.then((permissionStatus) => {
-				setPermissionState(permissionStatus.state);
-				permissionStatus.onchange = () => {
-					setPermissionState(permissionStatus.state);
-				};
-			});
+		try {
+			const perms = (navigator as any).permissions;
+			if (perms && typeof perms.query === 'function') {
+				perms
+					.query({ name: 'microphone' as PermissionName })
+					.then((permissionStatus: PermissionStatus) => {
+						setPermissionState(permissionStatus.state);
+						permissionStatus.onchange = () => {
+							setPermissionState(permissionStatus.state);
+						};
+					})
+					.catch(() => {
+						setPermissionState(null);
+					});
+			} else {
+				setPermissionState(null);
+			}
+		} catch {
+			setPermissionState(null);
+		}
 	}, []);
 
 	const requestPermissions = useCallback(() => {
@@ -43,20 +55,20 @@ export const useStartHaircheck = (): {
 	}, [daily]);
 
 	const isPermissionsPrompt = useMemo(() => {
-		return permissionState === 'prompt';
-	}, [permissionState]);
+		return permissionState === 'prompt' && camState !== 'granted' && micState !== 'granted';
+	}, [permissionState, camState, micState]);
 
 	const isPermissionsLoading = useMemo(() => {
-		return (permissionState === null || permissionState === 'granted') && micState === 'idle';
-	}, [permissionState, micState]);
+		return (permissionState === null || permissionState === 'granted') && (micState === 'idle' || camState === 'idle');
+	}, [permissionState, micState, camState]);
 
 	const isPermissionsGranted = useMemo(() => {
-		return permissionState === 'granted';
-	}, [permissionState]);
+		return permissionState === 'granted' || micState === 'granted' || camState === 'granted';
+	}, [permissionState, micState, camState]);
 
 	const isPermissionsDenied = useMemo(() => {
-		return permissionState === 'denied';
-	}, [permissionState]);
+		return permissionState === 'denied' || micState === 'blocked' || camState === 'blocked';
+	}, [permissionState, micState, camState]);
 
 	return {
 		isPermissionsPrompt,
