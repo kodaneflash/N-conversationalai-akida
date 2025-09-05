@@ -10,9 +10,18 @@ interface ConversationResponse {
   conversationId: string;
 }
 
+interface BusyError extends Error {
+  code: 'BUSY';
+}
+
+function isBusyError(e: unknown): e is BusyError {
+  if (typeof e !== 'object' || e === null) return false;
+  const maybe = e as { code?: unknown };
+  return maybe.code === 'BUSY';
+}
+
 export default function ChatPage() {
   const [conversationUrl, setConversationUrl] = useState<string | null>(null);
-  const [conversationId, setConversationId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,18 +50,30 @@ export default function ChatPage() {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+        type ErrorPayload = { error?: string; message?: string } | null;
+        const errorData: ErrorPayload = await response.json().catch(() => null);
+        // Propagate BUSY to modal by throwing a structured error the modal can catch
+        if (response.status === 429 && errorData?.error === 'BUSY') {
+          const e: BusyError = Object.assign(
+            new Error(errorData.message || 'Capacity busy'),
+            { code: 'BUSY' as const }
+          );
+          throw e;
+        }
+        throw new Error(errorData?.error || `HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data: ConversationResponse = await response.json();
       setConversationUrl(data.conversationUrl);
-      setConversationId(data.conversationId);
       return data.conversationUrl;
     } catch (err) {
       console.error('Failed to create conversation:', err);
-      setError(err instanceof Error ? err.message : 'Failed to create conversation');
-      return null;
+      // For BUSY, do not show the global error banner; modal handles it
+      if (!isBusyError(err)) {
+        setError(err instanceof Error ? err.message : 'Failed to create conversation');
+      }
+      // Re-throw so modal onStart handler can branch to busy state
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +82,6 @@ export default function ChatPage() {
   const handleClose = useCallback(() => {
     setIsOpen(false);
     setConversationUrl(null);
-    setConversationId(null);
     setError(null);
   }, []);
 

@@ -20,6 +20,7 @@ import type {
   ConversationReplicaInterruptedEvent,
   ConversationPerceptionToolCallEvent,
 } from "@/types/tavus";
+import { releaseByConversation } from "@/lib/concurrency";
 
 export async function POST(request: Request) {
   try {
@@ -143,6 +144,13 @@ async function handleSystemShutdown(event: SystemShutdownEvent) {
       break;
     default:
       console.log(`🔍 Call ended: ${shutdown_reason}`);
+  }
+
+  // Release capacity for this conversation
+  try {
+    await releaseByConversation(event.conversation_id);
+  } catch (e) {
+    console.error("Failed to release capacity for conversation", event.conversation_id, e);
   }
 }
 

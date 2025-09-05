@@ -14,7 +14,17 @@ interface CviModalProps {
   onStart?: () => Promise<void> | void;
 }
 
-type ModalStep = 'landing' | 'preflight' | 'session';
+type ModalStep = 'landing' | 'preflight' | 'session' | 'busy';
+ 
+interface BusyError extends Error {
+  code: 'BUSY';
+}
+
+function isBusyError(e: unknown): e is BusyError {
+  if (typeof e !== 'object' || e === null) return false;
+  const maybe = e as { code?: unknown };
+  return maybe.code === 'BUSY';
+}
  
 const StatusPill: React.FC = () => {
   const meetingState = useMeetingState();
@@ -45,6 +55,7 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
   const [step, setStep] = useState<ModalStep>('landing');
   const [isStartLoading, setIsStartLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [busyMessage, setBusyMessage] = useState<string | null>(null);
 
   const handleCancel = useCallback(() => {
     setStep('landing');
@@ -52,10 +63,18 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
   }, [onClose]);
 
   const handleStartClick = useCallback(async () => {
+    setIsStartLoading(true);
+    setBusyMessage(null);
     try {
-      setIsStartLoading(true);
       await onStart?.();
       setStep('preflight');
+    } catch (err) {
+      if (isBusyError(err)) {
+        if ((err as Error).message) setBusyMessage((err as Error).message);
+        setStep('busy');
+        return;
+      }
+      // leave error handling to parent UI; remain on landing
     } finally {
       setIsStartLoading(false);
     }
@@ -97,14 +116,14 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
         {/* Content by step */}
         {step === 'landing' && (
           <div className="relative z-10 mx-auto w-full max-w-3xl px-6 text-center text-white">
-            <h2 className="mx-auto mb-6 max-w-screen-md text-3xl !leading-tight lg:!text-6xl">He sees. He hears. He understands.</h2>
-            <p className="mx-auto mb-10 max-w-screen-md text-base text-inverse-muted lg:text-xl">Meet Charlie, an AI agent that perceives, reacts, and engages in real conversation. Chat like he&apos;s an old friend—or a new one!</p>
+            <h2 className="mx-auto mb-6 max-w-screen-md text-3xl !leading-tight lg:!text-6xl">She can see you. She hears you. She understands you.</h2>
+            <p className="mx-auto mb-10 max-w-screen-md text-base text-inverse-muted lg:text-xl">Meet Gigi, an AI agent that perceives, reacts, and engages in real conversation. Explore your deepest desire.</p>
 
             {/* CTA */}
             <StartCallButton onClick={handleStartClick} label={isStartLoading ? 'Starting…' : 'Start Video Chat'} />
 
             <p className="mt-6 text-xs text-inverse-muted">
-              By starting a conversation, I accept the Tavus <a className="underline" href="#" rel="noreferrer">Terms of Use</a> and acknowledge the <a className="underline" href="#" rel="noreferrer">Privacy Policy</a>.
+              By starting a conversation, I accept the Akida <a className="underline" href="#" rel="noreferrer">Terms of Use</a> and acknowledge the <a className="underline" href="#" rel="noreferrer">Privacy Policy</a>.
             </p>
           </div>
         )}
@@ -126,6 +145,15 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
                 <Conversation conversationUrl={conversationUrl} onLeave={handleCancel} />
               </div>
             </CVIProvider>
+          </div>
+        )}
+
+        {step === 'busy' && (
+          <div className="relative z-10 mx-auto w-full max-w-3xl px-6 text-center text-white">
+            <h2 className="mx-auto mb-4 max-w-screen-md text-3xl !leading-tight lg:!text-6xl">All of our replicas are busy chatting</h2>
+            <p className="mx-auto mb-8 max-w-screen-md text-base text-inverse-muted lg:text-xl">Please try again in a few minutes</p>
+            {busyMessage && <p className="mx-auto mb-8 max-w-screen-md text-sm text-inverse-muted">{busyMessage}</p>}
+            <StartCallButton onClick={() => setStep('landing')} label={'Try again'} />
           </div>
         )}
       </div>
