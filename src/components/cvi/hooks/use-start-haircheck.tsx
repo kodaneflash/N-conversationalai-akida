@@ -17,7 +17,8 @@ export const useStartHaircheck = (): {
 
 	useEffect(() => {
 		try {
-			const perms = (navigator as any).permissions;
+			type NavigatorWithPermissions = Navigator & { permissions?: Permissions };
+			const perms = (navigator as NavigatorWithPermissions).permissions;
 			if (perms && typeof perms.query === 'function') {
 				perms
 					.query({ name: 'microphone' as PermissionName })

@@ -1,0 +1,118 @@
+
+
+
+
+
+
+
+
+
+
+## Tavus.io integration overview (concise, detailed)
+What it is
+- Conversational Video Interface (CVI) from Tavus, embedded with Daily call objects. We create a conversation server-side, then join the Daily room client-side using CVI blocks.
+
+How it’s wired
+- Server route `src/app/api/tavus/new/route.ts` calls `createConversation()` in `src/lib/tavus.ts` to POST `https://tavusapi.com/v2/conversations`. It returns `{ conversationUrl, conversationId }`.
+- Page `src/app/chat/page.tsx` shows a hero + `Launcher`. Clicking the CTA sets `isOpen=true` for `CviModal` and triggers `createConversation()` via the modal’s `onStart` flow.
+- `CviModal` orchestrates 3 steps: landing → HairCheck → session. HairCheck and Conversation are wrapped in `CVIProvider` to share one Daily call object.
+- `CVIProvider` (`src/components/cvi/components/cvi-provider`) memo-creates a single `DailyIframe.createCallObject()` and passes it to `<DailyProvider callObject={...}>`.
+
+Supported features
+- Conversation creation with optional memories, conversation name, conversational context, audioOnly flag, and callback webhook URL (constructed from request host).
+- CVI blocks in use: HairCheck (camera/mic permissions & device selection) and Conversation (1:1 video with Replica). Device controls for mic/camera/screenshare are included.
+- Mobile resilience: iOS-safe heights, safe-area padding, singleton Daily object, improved Safari permissions (see `use-start-haircheck.tsx`).
+- Meeting status indicator (Waiting/Calling/Connected/Ended).
+
+Not included yet
+- No language selector UI; language is sent in the create request by the page.
+- No transcripts/CC UI (toggle fields exist in `lib/tavus.ts`, not surfaced).
+- No recording controls UI (server supports properties, but disabled in the page).
+- No multi-party layout; designed for 1:1 user ↔ Replica.
+
+Files responsible for chatting
+- `src/lib/tavus.ts`: builds Tavus API payload; returns `conversationUrl`/`conversationId`.
+- `src/app/api/tavus/new/route.ts`: server route to create conversations.
+- `src/components/cvi/components/cvi-provider/`: shared Daily call object via React context.
+- `src/components/cvi/components/hair-check/`: preflight permissions/devices and Join.
+- `src/components/cvi/components/conversation/`: joins via `useCVICall().joinCall({ url })`, renders tracks and controls.
+- `src/components/cvi-ui/cvi-modal.tsx`: orchestrates steps and passes `conversationUrl` into `Conversation`.
+
+Styling model
+- Tailwind utilities + custom tokens/utilities from `src/app/globals.css` for neon shell and effects: `--dialog-w`, `--radius-container`, `--primary`, `--success`, `.max-w-dialog-w`, `.md:rounded-container`, `.shadow-container`, `.bg-replica`, `.shimmer`.
+
+# FaceTime-style Tavus experience (Launcher + Modal with 3 states) 
+
+How it works (end-to-end)
+Launcher renders a compact hero with a background video and a glowing CTA. Clicking the CTA calls its onStart prop (from the page), which opens the modal.
+CviModal manages a 3-step flow using local state:
+landing: marketing copy + “Start Video Chat” CTA
+preflight: HairCheck (camera/mic permissions & device setup) inside a shared Daily context
+session: Conversation joins the Daily room via the conversationUrl
+CVIProvider exposes a single Daily call object to all CVI blocks, preventing duplicate-call errors and enabling device/permission hooks to function consistently.Key files and responsibilities
+Launcher: visual entry and CTA; no data fetching or CVI concerns
+CVIProvider: “singleton” Daily call object via React context
+CviModal: the complete UX flow and responsive neon shell
+Launcher
+Full-bleed background video, shimmer headline, and CTA. The button simply invokes onStart(), which the page uses to open the modal.             <div className="relative z-10 flex h/full w/full flex-col items-center justify-end gap-6 pb-8">
+              <p
+                className="shimmer font-medium tracking-wide text-4xl text-transparent bg-clip-text bg-[linear-gradient(90deg,_rgb(255,_255,_255),_rgba(255,_255,_255,_0.5)_50%,_rgb(255,_255,_255))] bg-stone-100"
+                data-text="Gigi is calling"
+              >
+                Gigi is calling
+              </p>
+
+              <StartCallButton onClick={onStart} />
+            </div> Styling is 100% utilities: Tailwind classes + the custom .shimmer effect defined in globals.css.
+CVIProvider
+Creates a single Daily call object once, then shares it with the CVI React context. This avoids multiple DailyIframe.createCallObject() instances that can break device/permission flows, especially on mobile.  // Keep a single Daily call object for the whole app lifecycle
+let sharedCallObject: ReturnType<typeof DailyIframe.createCallObject> | null = null;
+const getSharedCallObject = () => {
+  if (sharedCallObject) return sharedCallObject;
+  sharedCallObject = DailyIframe.createCallObject();
+  return sharedCallObject;
+};
+
+export const CVIProvider = ({ children }: { children: React.ReactNode }) => {
+  const callObject = useMemo(() => getSharedCallObject(), []);
+  return <DailyProvider callObject={callObject}>{children}</DailyProvider>;
+}; CviModal
+State-driven 3-step orchestration. It calls onStart() exactly when needed to create a conversation, then transitions to HairCheck, then into the live Conversation.    const handleStartClick = useCallback(async () => {
+    try {
+      setIsStartLoading(true);
+      await onStart?.();
+      setStep('preflight');
+    } finally {
+      setIsStartLoading(false);
+    }
+  }, [onStart]);
+
+  const handleJoinCall = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      if (!conversationUrl) {
+        await onStart?.();
+      }
+      setStep('session');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [conversationUrl, onStart]); The modal shell uses a responsive, mobile-safe container. We rely on 100svh and our custom tokens/utilities for sizing, borders, and glow. <div className="fixed inset-0 z-50 grid place-items-center p-0 md:p-8">
+  <div className="absolute inset-0 bg-black/50" />
+
+  <div className="relative h-[100svh] md:min-h-auto md:h-auto md:aspect-video max-w-dialog-w w-full md:rounded-container md:border-primary md:border-2 flex items-center justify-center shadow-container overflow-hidden bg-replica bg-center bg-cover bg-no-repeat">
+    {/* Background video */}
+    <video className="pointer-events-none absolute inset-0 h-full w-full object-cover" autoPlay playsInline muted loop>
+      <source src="https://cdn.replica.tavus.io/conversational-dialog/rep-dem.mp4" type="video/mp4" />
+    </video> Preflight and Session are wrapped with CVIProvider so HairCheck/Conversation get the same call object and device context. We added a simple full-size wrapper to ensure reliable iOS tap handling. {step === 'preflight' && (
+  <CVIProvider>
+    {/* Ensure the HairCheck area expands and allows taps across iOS overlays */}
+    <div className="relative z-10 h-full w-full">
+      <HairCheck isJoinBtnLoading={isLoading} onJoin={handleJoinCall} onCancel={handleCancel} />
+    </div>
+  </CVIProvider>
+)} Where the styling comes from
+Tailwind utilities throughout the components.
+A few custom utility classes and CSS variables injected via globals.css, used by the modal shell and hero:
+--dialog-w, --radius-container, --primary, --success
+.max-w-dialog-w, .md:rounded-container, .md:border-primary, .bg-replica, .shadow-container 

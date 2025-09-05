@@ -78,7 +78,7 @@ export default function ChatPage() {
       </div>
 
       {/* Modal */}
-      <CviModal open={isOpen} onClose={handleClose} conversationUrl={conversationUrl} language={selectedLanguage} onStart={async () => { await createConversation(); }} />
+      <CviModal open={isOpen} onClose={handleClose} conversationUrl={conversationUrl} onStart={async () => { await createConversation(); }} />
 
       {/* Error and loading hints below the fold */}
       {error && (

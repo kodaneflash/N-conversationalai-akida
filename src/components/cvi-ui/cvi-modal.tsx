@@ -12,7 +12,6 @@ interface CviModalProps {
   onClose: () => void;
   conversationUrl: string | null;
   onStart?: () => Promise<void> | void;
-  language?: string;
 }
 
 type ModalStep = 'landing' | 'preflight' | 'session';
@@ -42,7 +41,7 @@ const StatusPill: React.FC = () => {
   );
 };
 
-export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationUrl, onStart, language = 'english' }) => {
+export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationUrl, onStart }) => {
   const [step, setStep] = useState<ModalStep>('landing');
   const [isStartLoading, setIsStartLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -98,16 +97,6 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
         {/* Content by step */}
         {step === 'landing' && (
           <div className="relative z-10 mx-auto w-full max-w-3xl px-6 text-center text-white">
-            {/* Language pill */}
-            <div className="absolute left-4 top-4">
-              <div className="flex w-[176px] items-center justify-between rounded-3xl bg-white/10 px-4 py-2.5 capitalize backdrop-blur-[50px]">
-                <span>{language}</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 9l6 6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            </div>
-
             <h2 className="mx-auto mb-6 max-w-screen-md text-3xl !leading-tight lg:!text-6xl">He sees. He hears. He understands.</h2>
             <p className="mx-auto mb-10 max-w-screen-md text-base text-inverse-muted lg:text-xl">Meet Charlie, an AI agent that perceives, reacts, and engages in real conversation. Chat like he&apos;s an old friend—or a new one!</p>
 
@@ -122,7 +111,10 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
 
         {step === 'preflight' && (
           <CVIProvider>
-            <HairCheck isJoinBtnLoading={isLoading} onJoin={handleJoinCall} onCancel={handleCancel} />
+            {/* Ensure the HairCheck area expands and allows taps across iOS overlays */}
+            <div className="relative z-10 h-full w-full">
+              <HairCheck isJoinBtnLoading={isLoading} onJoin={handleJoinCall} onCancel={handleCancel} />
+            </div>
           </CVIProvider>
         )}
 
