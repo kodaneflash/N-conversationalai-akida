@@ -5,6 +5,7 @@ import { CVIProvider } from '@/components/cvi/components/cvi-provider';
 import { Conversation } from '@/components/cvi/components/conversation';
 import { HairCheck } from '../cvi/components/hair-check';
 import { useMeetingState } from '@daily-co/daily-react';
+import { StartCallButton } from './start-call-button';
 
 interface CviModalProps {
   open: boolean;
@@ -111,18 +112,7 @@ export const CviModal: React.FC<CviModalProps> = ({ open, onClose, conversationU
             <p className="mx-auto mb-10 max-w-screen-md text-base text-inverse-muted lg:text-xl">Meet Charlie, an AI agent that perceives, reacts, and engages in real conversation. Chat like he&apos;s an old friend—or a new one!</p>
 
             {/* CTA */}
-            <button onClick={handleStartClick} disabled={isStartLoading} className="group relative inline-flex h-[3.625rem] items-center justify-center rounded-full border border-white/10 bg-white/10 p-[5px] disabled:opacity-70">
-              <span className="pointer-events-none absolute inset-0 -z-10 h-full w-full animate-ping rounded-full bg-success/40" />
-              <span className="rounded-button bg-success shadow-success-btn flex h-12 items-center gap-3 rounded-full px-4 text-inverse">
-                <span className="grid h-7 w-7 place-items-center rounded-full bg-white/20">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 10l4-3v10l-4-3v-4z" fill="currentColor" />
-                    <rect x="3" y="7" width="12" height="10" rx="3" fill="currentColor" />
-                  </svg>
-                </span>
-                <span className="font-medium">{isStartLoading ? 'Starting…' : 'Start Video Chat'}</span>
-              </span>
-            </button>
+            <StartCallButton onClick={handleStartClick} label={isStartLoading ? 'Starting…' : 'Start Video Chat'} />
 
             <p className="mt-6 text-xs text-inverse-muted">
               By starting a conversation, I accept the Tavus <a className="underline" href="#" rel="noreferrer">Terms of Use</a> and acknowledge the <a className="underline" href="#" rel="noreferrer">Privacy Policy</a>.

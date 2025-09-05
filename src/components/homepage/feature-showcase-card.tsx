@@ -8,6 +8,10 @@ export interface FeatureShowcaseCardProps {
   imageAlt?: string;
   gradientFrom?: string;
   gradientTo?: string;
+  /** How the media should fit the frame for images (videos always cover). */
+  mediaFit?: 'cover' | 'contain';
+  /** If true, do not upscale image beyond its intrinsic size when using contain. */
+  preventUpscale?: boolean;
 }
 
 /**
@@ -18,26 +22,34 @@ export interface FeatureShowcaseCardProps {
 export function FeatureShowcaseCard({
   title = (
     <>
-      Bring <span className="bg-gradient-to-r from-[var(--velvet-700)] to-[var(--velvet-500)] bg-clip-text text-transparent">Akira</span> to life
+      The fastest, most <span className="bg-gradient-to-r from-[var(--velvet-700)] to-[var(--velvet-500)] bg-clip-text text-transparent">lifelike</span> AI companion model
     </>
   ),
   paragraphs = [
     (
       <>
-        Akira engages in natural, face-to-face conversation with realistic timing, expression, and presence.
+        Akira mirrors how people see, think, and respond, in real time.
       </>
     ),
     (
       <>
-        Built with real-time human simulation, she understands tone and visual context and responds with empathy.
+        By combining facial rendering, vision, speech, and emotional intelligence, our human simulation models enable face-to-face AI conversations that capture intent, nuance, and presence.
+      </>
+    ),
+    (
+      <>
+        Responses land in under 600 ms, with data retrieval in 30 ms, up to 15× faster than leading RAG systems.
       </>
     ),
   ],
-  imageSrc = '/akira.love.svg',
+  imageSrc = '/transform.webp',
   videoSrc,
   imageAlt = 'Akira preview',
   gradientFrom = 'oklch(0.3_0_0_/_0.30)',
   gradientTo = 'oklch(0.15_0_0_/_0.30)'
+  ,
+  mediaFit = 'contain',
+  preventUpscale = true
 }: FeatureShowcaseCardProps) {
   return (
     <section className="max-w-[1320px] mx-auto">
@@ -91,14 +103,27 @@ export function FeatureShowcaseCard({
                 aria-label={imageAlt}
               />
             ) : imageSrc ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={imageSrc}
-                alt={imageAlt}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
-                sizes="(min-width: 1024px) 50vw, 100vw"
-              />
+              mediaFit === 'cover' ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={imageSrc}
+                  alt={imageAlt}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  loading="lazy"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imageSrc}
+                    alt={imageAlt}
+                    className={`${preventUpscale ? 'w-auto h-auto max-w-full max-h-full' : 'w-full h-full object-contain'}`}
+                    loading="lazy"
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
+                </div>
+              )
             ) : null}
           </div>
         </div>
