@@ -1,0 +1,46 @@
+FaceTime-style Tavus CVI integration (kept implementations)
+
+1) Shared tokens & utilities (Tailwind/global CSS)
+- File: src/app/globals.css
+- Added :root variables: --dialog-w, --radius-container, --primary, --success
+- Added utility classes: .max-w-dialog-w, .md:rounded-container, .md:border-primary, .bg-replica,
+  .rounded-button, .shadow-container, .shadow-success-btn, .bg-success, .text-inverse, .text-inverse-muted
+
+2) CVIProvider (Daily singleton)
+- File: src/components/cvi/components/cvi-provider/index.tsx
+- Creates a single shared Daily call object via DailyIframe.createCallObject()
+- Provides it to <DailyProvider callObject={...}> to avoid duplicate DailyIframe errors
+
+3) Launcher (non-popup hero)
+- File: src/components/cvi-ui/launcher.tsx
+- Full-bleed hero with background video + glass veil
+- Pulsing green CTA button
+- Prop: onStart() → invoked to open modal / kick off conversation flow
+
+4) CviModal (FaceTime-style modal with 3 states)
+- File: src/components/cvi-ui/cvi-modal.tsx
+- Shell: neon frame, background video, glass veil, close pill
+- StatusPill: top-right; reflects Daily meeting state
+- State: Landing
+  - Language pill, headline/body, CTA
+  - CTA calls onStart() (server POST /api/tavus/new) then step → "preflight"
+  - isStartLoading disables CTA while creating conversation
+- State: Preflight (HairCheck block)
+  - Renders <CVIProvider><HairCheck /></CVIProvider> with no custom styling wrappers
+  - Props: isJoinBtnLoading (local isLoading), onJoin (handleJoinCall), onCancel (handleCancel)
+  - handleJoinCall ensures a conversationUrl exists (await onStart() if missing) then step → "session"
+- State: Session (Conversation block)
+  - Renders <CVIProvider><Conversation conversationUrl={conversationUrl} onLeave={handleCancel} /></CVIProvider>
+  - Maintains same neon shell for continuity
+- Close behavior: handleCancel() resets to Landing and invokes onClose()
+
+5) /chat page wiring
+- File: src/app/chat/page.tsx
+- Uses <Launcher /> + <CviModal />
+- createConversation(): POST /api/tavus/new; stores conversationUrl/id
+- Launcher onStart → setIsOpen(true)
+- CviModal onStart={createConversation}
+
+Notes
+- Removed custom preflight getUserMedia UI; use HairCheck block
+- HairCheck + Conversation run with a valid Daily context from CVIProvider, enabling permission prompts and device toggles

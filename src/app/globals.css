@@ -1,0 +1,241 @@
+@import "tailwindcss";
+
+/* --- Candy Dark Theme: Premium AI/Tech Palette --- */
+:root {
+  /* Core Surface Colors (Obsidian Series) */
+  --obsidian-950: #131313;           /* Main app background (darkest) */
+  --obsidian-900: #1A1A1A;           /* Card backgrounds */
+  --obsidian-800: #171717;           /* Deeper surface elements */
+  --obsidian-700: #1F1F1F;           /* Hover surface states */
+
+  /* Brand Colors (Velvet Pink Series) */
+  --velvet-700: #EC5A7A;             /* Primary brand pink - used widely */
+  --velvet-600: #F97086;             /* Logo pink - signature brand color */
+  --velvet-500: #F97187;             /* CTA button pink - call-to-action */
+  --velvet-300: color-mix(in srgb, var(--velvet-600) 60%, white 40%); /* Subtle tint */
+
+  /* Typography Colors */
+  --text-primary: #FFFFFF;           /* Headings and strong text (pure white) */
+  --text-muted: #A4A4A4;             /* Body text - muted gray */
+
+  /* UI Elements */
+  --border: #363636;                 /* Borders and dividers */
+
+  /* Semantic Color Mappings */
+  --color-bg: var(--obsidian-950);
+  --color-surface: var(--obsidian-900);
+  --color-surface-2: var(--obsidian-800);
+  --color-surface-3: var(--obsidian-700);
+  --color-border: var(--border);
+  --color-text: var(--text-primary);
+  --color-muted: var(--text-muted);
+  --color-primary: var(--velvet-600);       /* Signature brand color */
+  --color-primary-700: var(--velvet-700);   /* Primary brand pink */
+  --color-primary-500: var(--velvet-500);   /* CTA pink */
+  --color-accent: var(--velvet-700);
+  --color-accent-2: var(--velvet-500);
+
+  /* Additional Semantic Colors */
+  --color-success-500: #38D39F;
+  --color-warning-500: #F2B544;
+  --color-danger-500: #F23F5D;
+
+  /* Special Effects */
+  --shadow-glow: 0 0 24px color-mix(in srgb, var(--color-primary) 35%, transparent);
+
+  /* Signature Gradients */
+  --gradient-velvet-bloom: linear-gradient(135deg, var(--velvet-700) 0%, var(--velvet-600) 45%, var(--velvet-500) 100%);
+  --gradient-rose-kiss: linear-gradient(135deg, var(--velvet-700), var(--velvet-500));
+  --gradient-obsidian-sheen: linear-gradient(180deg, color-mix(in srgb, transparent 70%, black) 0%, transparent 60%);
+  
+  /* Chat UI Color Palette - Updated to candy dark scheme */
+  --chat-primary: var(--velvet-600);
+  --chat-primary-light: var(--velvet-300);
+  --chat-secondary: var(--velvet-500);
+  --chat-accent: var(--velvet-700);
+  --chat-bg: color-mix(in srgb, var(--obsidian-900) 80%, transparent 20%);
+  --chat-text: var(--text-primary);
+  --chat-user-bubble: color-mix(in srgb, var(--velvet-600) 20%, var(--obsidian-800) 80%);
+  --chat-bot-bubble: color-mix(in srgb, var(--velvet-700) 15%, var(--obsidian-700) 85%);
+
+  /* Legacy mappings for compatibility */
+  --background: var(--color-bg);
+  --foreground: var(--color-text);
+
+  /* CVI Shell Tokens */
+  --dialog-w: 82.5rem; /* 1320px */
+  --radius-container: 28px;
+  --primary: #F230AA; /* neon pink */
+  --success: #32C75C; /* green CTA */
+}
+
+/* Tailwind v4 theme configuration */
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-family-sans: var(--font-geist-sans);
+  --font-family-mono: var(--font-geist-mono);
+  
+  /* Velvet color palette */
+  --color-velvet-300: #F7A5B5;
+  --color-velvet-500: #F97187;
+  --color-velvet-600: #F97086;
+  --color-velvet-700: #EC5A7A;
+  
+  /* Obsidian color palette */
+  --color-obsidian-700: #1F1F1F;
+  --color-obsidian-800: #171717;
+  --color-obsidian-900: #1A1A1A;
+  --color-obsidian-950: #131313;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Button Styles */
+.btn-primary {
+  background: var(--gradient-velvet-bloom);
+  color: white;
+  box-shadow: var(--shadow-glow);
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto w-full;
+    max-width: 1040px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* CVI Shell Utility Classes */
+.max-w-dialog-w { max-width: var(--dialog-w); }
+.md\:rounded-container { border-radius: var(--radius-container); }
+.md\:border-primary { border-color: var(--primary); }
+.bg-replica { background-image: url("https://cdn.replica.tavus.io/conversational-dialog/rep-dem-bg.webp"); }
+.rounded-button { border-radius: 1000px; }
+.shadow-container{
+  box-shadow:
+    0 0 0 1px rgba(242,48,170,.25) inset,
+    0 0 24px 8px rgba(242,48,170,.45),
+    0 0 140px 30px rgba(242,48,170,.25);
+}
+.shadow-success-btn{ box-shadow: 0 8px 24px rgba(50,199,92,.35); }
+.bg-success{ background-color: var(--success); }
+.text-inverse{ color:#fff; }
+.text-inverse-muted{ color:rgba(245,243,239,.9); }
+/* Shimmer calling text */
+.shimmer {
+  position: relative;
+  animation: baseBreathe 2600ms ease-in-out infinite;
+  text-shadow: 0 0 1px rgba(0,0,0,.15);
+}
+
+@keyframes baseBreathe {
+  0%,100% { opacity: .82; }
+  50%     { opacity: 1;   }
+}
+
+.shimmer::after {
+  content: attr(data-text);
+  position: absolute; inset: 0;
+  color: #fff;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-transform: inherit;
+  /* Visible band uses white in mask; edges are transparent */
+  -webkit-mask-image: linear-gradient(90deg,
+     rgba(255,255,255,0) 0%,
+     rgba(255,255,255,0) 42%,
+     rgba(255,255,255,1) 47%,
+     rgba(255,255,255,1) 53%,
+     rgba(255,255,255,0) 58%,
+     rgba(255,255,255,0) 100%
+  );
+  mask-image: linear-gradient(90deg,
+     rgba(255,255,255,0) 0%,
+     rgba(255,255,255,0) 42%,
+     rgba(255,255,255,1) 47%,
+     rgba(255,255,255,1) 53%,
+     rgba(255,255,255,0) 58%,
+     rgba(255,255,255,0) 100%
+  );
+  -webkit-mask-size: 220% 100%;
+  mask-size: 220% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: sweep 4800ms linear infinite;
+  will-change: -webkit-mask-position, mask-position, opacity;
+}
+
+@keyframes sweep {
+  0%   { -webkit-mask-position: -120% 0; mask-posMition: -120% 0; }
+  100% { -webkit-mask-position: 120% 0;  mask-position: 120% 0;  }
+}
+
+/* --- Breathing CTA Ring + Pill --- */
+.btn-ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  padding: 6px; /* ring thickness */
+  background: transparent; /* remove static track to avoid double edge */
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  isolation: isolate; /* keep halo layering predictable */
+}
+
+.btn-ring::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  /* single halo outside the ring */
+  box-shadow:
+    inset 0 0 0 6px rgba(255,255,255,.10), /* subtle inner track */
+    0 0 0 8px rgba(255,255,255,.14);      /* base outer edge */
+  transform: scale(1);
+  opacity: 1;
+  animation: ringBreath 2200ms ease-in-out infinite;
+}
+
+@keyframes ringBreath {
+  0%,100% {
+    box-shadow:
+      inset 0 0 0 6px rgba(255,255,255,.10),
+      0 0 0 10px rgba(255,255,255,.18);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 6px rgba(255,255,255,.10),
+      0 0 0 16px rgba(255,255,255,.30);
+    transform: scale(1.01);
+  }
+}
+
+.btn-inner {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 48px; padding: 0 20px;
+  border-radius: 9999px;
+  background: #32C75C;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(50,199,92,.35);
+  position: relative;
+  z-index: 1; /* above halo */
+  animation: pillGlow 2200ms ease-in-out infinite;
+}
+
+@keyframes pillGlow {
+  0%,100% {
+    box-shadow: 0 8px 24px rgba(50,199,92,.35);
+  }
+  50% {
+    box-shadow: 0 12px 34px rgba(50,199,92,.45);
+  }
+}

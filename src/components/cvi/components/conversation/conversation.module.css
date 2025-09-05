@@ -1,0 +1,212 @@
+/* Main container */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  color: white;
+  position: relative;
+}
+
+/* Video container */
+.videoContainer {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+}
+
+/* Main video */
+.mainVideoContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.mainVideoContainerScreenSharing {
+  background: #000;
+}
+
+.mainVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.mainVideoScreenSharing {
+  object-fit: contain;
+  background: #000;
+}
+
+.mainVideoHidden {
+  display: none;
+}
+
+/* Self view */
+.selfViewContainer {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+
+.previewVideoContainer {
+  width: 200px;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: #222;
+  border: 2px solid #333;
+}
+
+.previewVideoContainerVertical {
+  width: 120px;
+  height: 160px;
+}
+
+.previewVideoContainerHidden {
+  background: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.previewVideoVertical {
+  object-fit: cover;
+}
+
+.previewVideoHidden {
+  display: none;
+}
+
+/* Audio wave container */
+.audioWaveContainer {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  z-index: 5;
+}
+
+/* Footer controls */
+.footer {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footerControls {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.leaveButton {
+  background: #ff4444;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.leaveButton:hover {
+  background: #ff6666;
+  transform: scale(1.05);
+}
+
+.leaveButtonIcon {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Waiting state */
+.waitingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #888;
+}
+
+.waitingContainer p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+/* Error state */
+.errorContainer {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 68, 68, 0.9);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  z-index: 20;
+  text-align: center;
+  max-width: 400px;
+}
+
+.errorContainer p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .selfViewContainer {
+    top: 10px;
+    right: 10px;
+  }
+  
+  .previewVideoContainer {
+    width: 120px;
+    height: 90px;
+  }
+  
+  .previewVideoContainerVertical {
+    width: 80px;
+    height: 120px;
+  }
+  
+  .footer {
+    padding: 15px;
+  }
+  
+  .footerControls {
+    gap: 10px;
+  }
+  
+  .leaveButton {
+    width: 45px;
+    height: 45px;
+  }
+}

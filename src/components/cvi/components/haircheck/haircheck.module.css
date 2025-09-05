@@ -1,0 +1,243 @@
+/* HairCheck container */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Header */
+.header {
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 10px 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Video container */
+.videoContainer {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.videoPreview {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  background: #000;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.videoPlaceholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #2d3748;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #a0aec0;
+}
+
+.cameraOffIcon {
+  margin-bottom: 15px;
+  opacity: 0.7;
+}
+
+.videoPlaceholder p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Permission prompt */
+.permissionPrompt {
+  padding: 60px 20px;
+  color: #4a5568;
+}
+
+.permissionIcon {
+  margin-bottom: 20px;
+  color: #667eea;
+  opacity: 0.8;
+}
+
+.permissionPrompt h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #2d3748;
+}
+
+.permissionPrompt p {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Controls */
+.controls {
+  margin-bottom: 30px;
+}
+
+.deviceControls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+/* Error container */
+.errorContainer {
+  background: #fed7d7;
+  border: 1px solid #fc8181;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.errorIcon {
+  font-size: 24px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.errorContent {
+  flex: 1;
+}
+
+.errorContent h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #c53030;
+  margin: 0 0 8px 0;
+}
+
+.errorContent p {
+  font-size: 14px;
+  color: #c53030;
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+.errorHelp {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 180px;
+}
+
+.primaryButton:hover:not(.disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.primaryButton.disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.secondaryButton {
+  background: transparent;
+  color: #718096;
+  border: 2px solid #e2e8f0;
+  padding: 12px 26px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.secondaryButton:hover {
+  border-color: #cbd5e0;
+  color: #4a5568;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .content {
+    padding: 30px 20px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .videoPreview {
+    height: 250px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    max-width: 280px;
+  }
+}
