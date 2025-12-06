@@ -35,11 +35,11 @@ export function HighlightedText({ children }: { children: React.ReactNode }) {
 }
 
 // Pre-built tagline content
-export function AkiraTagline({ variant = 'hero' }: { variant?: 'hero' | 'features' }) {
+export function ReaperTagline({ variant = 'hero' }: { variant?: 'hero' | 'features' }) {
   if (variant === 'hero') {
     return (
       <TaglineText variant="hero">
-        Meet Akira,<br />
+        Meet Reaper,<br />
         Always here to listen and talk.<br />
         Always on your side.
       </TaglineText>

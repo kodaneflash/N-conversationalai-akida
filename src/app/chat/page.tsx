@@ -39,9 +39,9 @@ export default function ChatPage() {
         },
         body: JSON.stringify({
           memories: true,
-          conversationName: 'Akira AI Conversation',
+          conversationName: 'Reaper AI Conversation',
           conversationalContext:
-            "You are Akira, a helpful AI companion. Be engaging, empathetic, and showcase your ability to have natural conversations while building meaningful connections.",
+            "You are Reaper, a helpful AI companion. Be engaging, empathetic, and showcase your ability to have natural conversations while building meaningful connections.",
           audioOnly: false,
           enableRecording: false,
           enablePerception: true,

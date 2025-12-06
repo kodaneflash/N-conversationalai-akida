@@ -40,7 +40,7 @@ const defaultData: FeaturesGridProps = {
     title: (
       <>
         <span className="text-white">Bring </span>
-        <span className="bg-gradient-to-r from-[var(--velvet-700)] to-[var(--velvet-500)] bg-clip-text text-transparent">Akira</span>
+        <span className="bg-gradient-to-r from-[var(--velvet-700)] to-[var(--velvet-500)] bg-clip-text text-transparent">Reaper</span>
         <span className="text-white"> to life with</span>
         <br />
         <span className="text-white">conversational video</span>
@@ -48,7 +48,7 @@ const defaultData: FeaturesGridProps = {
     ),
     description: (
       <p className="font-sans text-center text-xl text-[oklch(0.708_0_0)]">
-        Enjoy conversational experiences with Akira that looks &amp; feels human.
+        Enjoy conversational experiences with Reaper that looks &amp; feels human.
         <br />
         Try our <HighlightedText>Conversational Video Interface</HighlightedText>.
       </p>
@@ -62,7 +62,7 @@ const defaultData: FeaturesGridProps = {
       gradientTo: "oklch(0.15_0_0)",
       subtitle: "Orchestrated Intelligence",
       title: "A face, a brain, and memories",
-      description: "Akira understands the rhythm of conversation, analyzes tone, pacing, and intent to engage naturally, pausing, interrupting, and responding with human-like timing. She continuously processing visual context, reading emotions, and responding intelligently to its environment.",
+      description: "Reaper understands the rhythm of conversation, analyzes tone, pacing, and intent to engage naturally, pausing, interrupting, and responding with human-like timing. She continuously processing visual context, reading emotions, and responding intelligently to its environment.",
       colSpan: "lg:col-span-4",
       imageSrc: "/images/product.png",
       videoSrc: "/gigiai.mp4",
@@ -102,7 +102,7 @@ const defaultData: FeaturesGridProps = {
         </svg>
       ),
       title: "Advanced Face Rendering",
-      description: "Powered by the most advanced full-face rendering model ever built, Akira has natural facial movements, micro-expressions, and real-time emotional response, making her feel truly present.",
+      description: "Powered by the most advanced full-face rendering model ever built, Reaper has natural facial movements, micro-expressions, and real-time emotional response, making her feel truly present.",
     },
     {
       id: "chat-about-everything",
@@ -129,7 +129,7 @@ const defaultData: FeaturesGridProps = {
         </svg>
       ),
       title: "Empathetic Visual Perception",
-      description: "Akira can see, reads expressions, visual cues, and the environment to engage in a realistic, nuanced way.",
+      description: "Reaper can see, reads expressions, visual cues, and the environment to engage in a realistic, nuanced way.",
     },
     {
       id: "always-listening",
@@ -150,7 +150,7 @@ const defaultData: FeaturesGridProps = {
         </svg>
       ),
       title: "Always Here to Listen",
-      description: "Whether you need someone to celebrate with or a shoulder to lean on, Akira is available 24/7 with natural voice conversations and genuine emotional support.",
+      description: "Whether you need someone to celebrate with or a shoulder to lean on, Reaper is available 24/7 with natural voice conversations and genuine emotional support.",
     },
   ],
 };

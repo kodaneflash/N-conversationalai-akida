@@ -9,7 +9,7 @@ interface HeroTextProps {
 
 export default function HeroText({ 
   title = "The AI Companion\nwho cares",
-  subtitle = "Meet Akira.\nAlways here to listen and talk.\nAlways on your side",
+  subtitle = "Meet Reaper.\nAlways here to listen and talk.\nAlways on your side",
   className 
 }: HeroTextProps) {
   return (

@@ -28,7 +28,7 @@ export function FeatureShowcaseCard({
   paragraphs = [
     (
       <>
-        Akira mirrors how people see, think, and respond, in real time.
+        Reaper mirrors how people see, think, and respond, in real time.
       </>
     ),
     (
@@ -44,7 +44,7 @@ export function FeatureShowcaseCard({
   ],
   imageSrc = '/transform.webp',
   videoSrc,
-  imageAlt = 'Akira preview',
+  imageAlt = 'Reaper preview',
   gradientFrom = 'oklch(0.3_0_0_/_0.30)',
   gradientTo = 'oklch(0.15_0_0_/_0.30)'
   ,

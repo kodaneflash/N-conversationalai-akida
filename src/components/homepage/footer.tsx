@@ -7,8 +7,8 @@ interface FooterProps {
 
 export default function Footer({ 
   discordUrl = "https://discord.gg/placeholder",
-  twitterUrl = "https://x.com/myakirasol", 
-  companyName = "Akira",
+  twitterUrl = "https://x.com/reaperonsol", 
+  companyName = "Reaper",
   year = 2025
 }: FooterProps) {
   return (

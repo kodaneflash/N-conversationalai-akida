@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 import { useRouter } from "next/navigation";
 import { TelegramLogo } from "@/components/Logos/TelegramLogo";
-import { AkiraTagline } from "@/components/ui/tagline-text";
+import { ReaperTagline } from "@/components/ui/tagline-text";
 
 export function TelegramPill() {
   return (
     <a
-      href="https://t.me/akiraonsol"
+      href="https://t.me/reaperonsolana"
       target="_blank"
       rel="noreferrer noopener"
       aria-label="Join our Telegram"
@@ -84,13 +84,13 @@ export function HeroSectionWithBeamsAndGrid() {
           Meet your AI companion,{" "}
           <div className="relative mx-auto inline-block w-max [filter:drop-shadow(0px_1px_3px_rgba(236,_90,_122,_0.3))]">
             <div className="bg-gradient-to-r from-[var(--velvet-700)] to-[var(--velvet-500)] bg-clip-text text-transparent">
-              <span className="">Akira.</span>
+              <span className="">Reaper.</span>
             </div>
           </div>
         </Balancer>
       </h2>
       <div className="relative z-50 mx-auto mt-4 max-w-lg px-4">
-        <AkiraTagline variant="hero" />
+        <ReaperTagline variant="hero" />
       </div>
       <div className="mb-10 mt-8 flex w-full flex-col items-center justify-center gap-4 px-8 sm:flex-row md:mb-20">
         <button
@@ -101,7 +101,7 @@ export function HeroSectionWithBeamsAndGrid() {
         </button>
         <button
           onClick={() => {
-            window.open('https://x.com/myakirasol', '_blank', 'noopener,noreferrer');
+            window.open('https://x.com/reaperonsol', '_blank', 'noopener,noreferrer');
           }}
           className="group relative z-20 flex h-12 w-full cursor-pointer items-center justify-center space-x-2 rounded-lg px-6 py-3 text-sm font-semibold leading-6 no-underline transition duration-200 hover:-translate-y-0.5 sm:w-52 border-2 hover:scale-105"
           style={{ 

@@ -13,8 +13,8 @@ export const VectorLogo = ({
 }: VectorLogoProps) => {
   return (
     <img
-      src="/akira.love.svg"
-      alt="Akira Logo"
+      src="/reaper.so.svg"
+      alt="Reaper Logo"
       width={width}
       height={height}
       className={className}
